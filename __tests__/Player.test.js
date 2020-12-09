@@ -63,3 +63,46 @@ test('creates a player object', () => {
       }
     };
   });
+
+  test("gets player's attack value", () => {
+    const player = new Player('Dave');
+    player.strength = 10;
+  
+    Player.prototype.getAttackValue = function() {
+      const min = this.strength - 5;
+      const max = this.strength + 5;
+    
+      return Math.floor(Math.random() * (max - min) + min);
+    };
+  });
+
+  test('adds a potion to the inventory', () => {
+    const player = new Player('Dave');
+    const oldCount = player.inventory.length;
+  
+    Player.prototype.addPotion = function(potion) {
+      this.inventory.push(potion);
+    };
+  });
+
+  test('uses a potion from inventory', () => {
+    const player = new Player('Dave');
+    player.inventory = [new Potion(), new Potion(), new Potion()];
+    const oldCount = player.inventory.length;
+  
+    Player.prototype.usePotion = function(index) {
+      const potion = this.getInventory().splice(index, 1)[0];
+    
+      switch (potion.name) {
+        case 'agility':
+          this.agility += potion.value;
+          break;
+        case 'health':
+          this.health += potion.value;
+          break;
+        case 'strength':
+          this.strength += potion.value;
+          break;
+      }
+    };
+  });
